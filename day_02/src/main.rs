@@ -15,12 +15,12 @@ fn part_two(input: &str) -> isize {
     let lines = input.lines();
 
     lines.fold(0, |acc, line| {
-        if is_line_safe(line, None) {
-            acc + 1
+        acc + if is_line_safe(line, None) {
+            1
         } else if (0..10).find(|n| is_line_safe(line, Some(*n))) != None {
-            acc + 1
+            1
         } else {
-            acc
+            0
         }
     })
 }
