@@ -20,7 +20,8 @@ fn part_two(input: &str) -> usize {
 
     part_one(splits.next().unwrap())
         + splits
-            .map(|donts| part_one(donts.split_once("do()").unwrap_or(("", "")).1))
+            .map(|donts| donts.split_once("do()").unwrap_or(("", "")))
+            .map(|(_, dos)| part_one(dos))
             .sum::<usize>()
 }
 
