@@ -2,12 +2,14 @@
 #### in rust
 
 
+I started in zig, having more fun in rust. I kept the first few days in `zig_archive/`. 
+
 to test:
-```sh
+```
 cargo test -p day_01
 ```
 
 to run:
-```sh
+```
 cargo run -p day_01
 ```
