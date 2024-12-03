@@ -11,22 +11,17 @@ fn part_one(input: &str) -> usize {
                 right.parse::<usize>().unwrap(),
             )
         })
-        .fold(0, |acc, (l, r)| acc + l * r)
+        .map(|(l, r)| l * r)
+        .sum()
 }
 
 fn part_two(input: &str) -> usize {
-
     let mut splits = input.split("don't()");
 
-    let first = part_one(splits.next().unwrap());
-
-    splits.fold(first, |acc, donts| {
-        if let Some((_, dos)) = donts.split_once("do()") {
-            acc + part_one(dos)
-        } else {
-            acc
-        }
-    })
+    part_one(splits.next().unwrap())
+        + splits
+            .map(|donts| part_one(donts.split_once("do()").unwrap_or(("", "")).1))
+            .sum::<usize>()
 }
 
 fn main() {
@@ -34,7 +29,6 @@ fn main() {
     println!("Part One: {}", part_one(input));
     println!("Part Two: {}", part_two(input));
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -45,6 +39,11 @@ mod tests {
 
     static INPUT_PART_2: &str =
         r"xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
+
+    #[test]
+    fn test_part_zero() {
+        assert_eq!(part_one(""), 0);
+    }
 
     #[test]
     fn test_part_one() {
