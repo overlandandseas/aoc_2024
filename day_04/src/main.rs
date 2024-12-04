@@ -37,7 +37,6 @@ fn part_two(input: &str) -> usize {
 }
 
 fn is_x(rows: &Vec<Vec<char>>, (x, y): (usize, usize)) -> bool {
-    // down right
     if let Some(first) = rows
         .get(y.overflowing_sub(1).0)
         .and_then(|col| col.get(x.overflowing_sub(1).0))
@@ -51,7 +50,6 @@ fn is_x(rows: &Vec<Vec<char>>, (x, y): (usize, usize)) -> bool {
         }
     }
 
-    // up right
     if let Some(first) = rows
         .get(y + 1)
         .and_then(|col| col.get(x.overflowing_sub(1).0))
