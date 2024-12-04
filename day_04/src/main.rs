@@ -26,10 +26,8 @@ fn part_two(input: &str) -> usize {
     let mut answer = 0;
     for (i, column) in rows.iter().enumerate() {
         for (j, entry) in column.iter().enumerate() {
-            if *entry == 'A' {
-                if is_x(&rows, (j, i)) {
-                    answer += 1;
-                }
+            if *entry == 'A' && is_x(&rows, (j, i)) {
+                answer += 1;
             }
         }
     }
