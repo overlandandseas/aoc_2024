@@ -18,7 +18,8 @@ fn part_one(input: &str) -> isize {
 
     left.iter()
         .zip(right.iter())
-        .fold(0, |acc, val| acc + (val.0 - val.1).abs())
+        .map(|(l, r)| (l - r).abs())
+        .sum()
 }
 
 fn part_two(input: &str) -> usize {
@@ -37,13 +38,9 @@ fn part_two(input: &str) -> usize {
         }
     }
 
-    left.iter().fold(0, |acc, l| {
-        acc + if let Some(r) = right.get(l) {
-            l.parse::<usize>().unwrap() * r
-        } else {
-            0
-        }
-    })
+    left.iter()
+        .flat_map(|l| right.get(l).map(|r| l.parse::<usize>().unwrap() * r))
+        .sum()
 }
 
 fn main() {
