@@ -1,4 +1,7 @@
-use std::collections::{HashMap, HashSet};
+use std::{
+    cmp::Ordering,
+    collections::{HashMap, HashSet},
+};
 
 #[derive(Debug)]
 struct PageOrdering<'a> {
@@ -47,7 +50,6 @@ fn is_line_safe(rules: &HashMap<&str, PageOrdering>, line: &str) -> bool {
     }
 
     true
-
 }
 
 fn make_rules(page_ordering_rules: &str) -> HashMap<&str, PageOrdering> {
@@ -96,16 +98,54 @@ fn part_one(input: &str) -> usize {
         .sum()
 }
 
+fn make_line_safe<'a>(rules: &HashMap<&str, PageOrdering>, line: &'a str) -> Vec<&'a str> {
+    let mut unsafe_vec: Vec<&str> = line.split(",").collect();
+
+    unsafe_vec.sort_by(|b, a| {
+        if is_line_safe(rules, &format!("{},{}", a, b)) {
+            Ordering::Greater
+        } else {
+            Ordering::Less
+        }
+    });
+
+    unsafe_vec
+}
+
+fn part_two(input: &str) -> usize {
+    let (page_ordering_rules, updates) = input.split_once("\n\n").unwrap();
+
+    let rules = make_rules(page_ordering_rules);
+
+    let unsafe_lines = updates.lines().filter(|line| !is_line_safe(&rules, line));
+
+    let safe_lines = unsafe_lines.map(|line| make_line_safe(&rules, line));
+
+
+    safe_lines
+        .into_iter()
+        .flat_map(|update| {
+            update
+                .iter()
+                .take((update.len() / 2) + 1)
+                .last()
+                .unwrap()
+                .parse::<usize>()
+        })
+        .sum()
+}
+
 fn main() {
     let input = include_str!("../input");
 
     println!("Part One: {}", part_one(input));
+    println!("Part Two: {}", part_two(input));
 }
 
 #[cfg(test)]
 
 mod tests {
-    use crate::part_one;
+    use crate::{part_one, part_two};
 
     static INPUT: &str = r"47|53
 97|13
@@ -139,5 +179,9 @@ mod tests {
     #[test]
     fn test_part_one() {
         assert_eq!(part_one(INPUT), 143);
+    }
+    #[test]
+    fn test_part_two() {
+        assert_eq!(part_two(INPUT), 123);
     }
 }
