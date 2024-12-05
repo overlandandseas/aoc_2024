@@ -35,10 +35,23 @@ impl<'a> PageOrdering<'a> {
     }
 }
 
-fn part_one(input: &str) -> usize {
-    let mut rules: HashMap<&str, PageOrdering> = HashMap::new();
-    let (page_ordering_rules, updates) = input.split_once("\n\n").unwrap();
+fn is_line_safe(rules: &HashMap<&str, PageOrdering>, line: &str) -> bool {
+    let mut page_numbers = line.split(",");
 
+    while let Some(page_number) = page_numbers.next() {
+        if let Some(page) = rules.get(page_number) {
+            if !page.safe(page_numbers.clone(), page_number) {
+                return false;
+            }
+        }
+    }
+
+    true
+
+}
+
+fn make_rules(page_ordering_rules: &str) -> HashMap<&str, PageOrdering> {
+    let mut rules: HashMap<&str, PageOrdering> = HashMap::new();
     for rule in page_ordering_rules.lines() {
         let (left, right) = rule.split_once("|").unwrap();
 
@@ -59,34 +72,26 @@ fn part_one(input: &str) -> usize {
         }
     }
 
-    let mut safe_updates = vec![];
+    rules
+}
 
-    'outer: for update in updates.lines() {
-        let mut page_numbers = update.split(",");
+fn part_one(input: &str) -> usize {
+    let (page_ordering_rules, updates) = input.split_once("\n\n").unwrap();
 
-        while let Some(page_number) = page_numbers.next() {
-            if let Some(page) = rules.get(page_number) {
-                if !page.safe(page_numbers.clone(), page_number) {
-                    continue 'outer;
-                }
-            }
-        }
+    let rules = make_rules(page_ordering_rules);
 
-        safe_updates.push(update);
-    }
+    updates
+        .lines()
+        .filter(|s| is_line_safe(&rules, s))
+        .flat_map(|update| {
+            let pages: Vec<&str> = update.split(",").collect();
 
-    safe_updates
-        .into_iter()
-        .map(|update| {
-            let length = update.split(",").count();
-
-            update
-                .split(",")
-                .take((length / 2) + 1)
+            pages
+                .iter()
+                .take((pages.len() / 2) + 1)
                 .last()
                 .unwrap()
                 .parse::<usize>()
-                .unwrap()
         })
         .sum()
 }
