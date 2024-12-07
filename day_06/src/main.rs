@@ -121,9 +121,9 @@ fn part_two(input: &str) -> usize {
 
         let obstacle = guard.front();
 
-        if !obstacles.contains(&obstacle)
-            && !rigids.contains(&obstacle)
-            && !paces_pos.contains(&obstacle)
+        if !(obstacles.contains(&obstacle)
+            || rigids.contains(&obstacle)
+            || paces_pos.contains(&obstacle))
         {
             let mut ghost_paces = HashSet::new();
             let mut ghost_guard = guard.ghost_step(&rigids);
