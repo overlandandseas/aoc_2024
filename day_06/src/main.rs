@@ -44,7 +44,7 @@ impl Guard {
         }
     }
 
-    fn step(&mut self, rigids: &HashSet<(isize, isize)>, obstical: Option<(isize, isize)>) {
+    fn step(&mut self, rigids: &HashSet<(isize, isize)>, obstacle: Option<(isize, isize)>) {
         let front = self.front();
 
         if rigids.contains(&front) {
@@ -52,7 +52,7 @@ impl Guard {
             return;
         }
 
-        if let Some(obst) = obstical {
+        if let Some(obst) = obstacle {
             if obst == front {
                 self.rotate();
                 return;
@@ -116,33 +116,33 @@ fn part_two(input: &str) -> usize {
         }
     }
 
-    let mut obsticals = HashSet::new();
+    let mut obstacles = HashSet::new();
     let mut paces = HashSet::new();
     let mut paces_pos = HashSet::new();
     while inbounds(&guard, max_x, max_y) {
         paces.insert(guard.hash());
         paces_pos.insert(guard.pos);
 
-        let obstical = guard.front();
+        let obstacle = guard.front();
 
-        if !obsticals.contains(&obstical) && !rigids.contains(&obstical) && !paces_pos.contains(&obstical) {
+        if !obstacles.contains(&obstacle) && !rigids.contains(&obstacle) && !paces_pos.contains(&obstacle) {
             let mut ghost_paces = HashSet::new();
             let mut ghost_guard = guard.ghost_step(&rigids);
             while inbounds(&ghost_guard, max_x, max_y) {
                 if paces.contains(&ghost_guard.hash()) || ghost_paces.contains(&ghost_guard.hash())
                 {
-                    obsticals.insert(obstical);
+                    obstacles.insert(obstacle);
                     break;
                 } else {
                     ghost_paces.insert(ghost_guard.hash());
-                    ghost_guard.step(&rigids, Some(obstical));
+                    ghost_guard.step(&rigids, Some(obstacle));
                 }
             }
         }
 
         guard.step(&rigids, None);
     }
-    obsticals.len()
+    obstacles.len()
 }
 
 fn inbounds(guard: &Guard, x: isize, y: isize) -> bool {
