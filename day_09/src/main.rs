@@ -5,7 +5,7 @@ fn part_one(input: &str) -> usize {
         .chars()
         .enumerate()
         .map(|(i, c)| {
-            let num = c.to_digit(10).unwrap() as usize;
+            let num  = c.to_digit(10).unwrap() as usize;
             if i % 2 != 0 {
                 max_char.to_string().repeat(num)
             } else {
@@ -35,7 +35,7 @@ fn part_one(input: &str) -> usize {
             }
         })
         .enumerate()
-        .map(|(index, c)| index * (c as u32) as usize)
+        .map(|(index, c)| index * (c as usize))
         .sum::<usize>()
 }
 
