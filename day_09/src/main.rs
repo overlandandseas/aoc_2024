@@ -43,8 +43,6 @@ fn main() {
     let input = include_str!("../input");
 
     println!("Part One: {}", part_one(input));
-    // 90428939430 too low
-    // 90428939430
 }
 
 #[cfg(test)]
