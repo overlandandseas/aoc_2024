@@ -145,35 +145,7 @@ fn defrag(blocks: &str) -> String {
 fn part_two(input: &str) -> usize {
     let blocks = get_blocks(input);
 
-    let mut blocks_mod = defrag(&blocks);
-
-    // while blocks_mod != defrag(&blocks_mod) {
-    //     blocks_mod = defrag(&blocks_mod);
-    // }
-
-    let ah = blocks_mod
-        .chars()
-        .map(|c| {
-            if c == MAX_CHAR {
-                '.'
-            } else {
-                (c as u32).to_string().chars().next().unwrap()
-            }
-        })
-        .collect::<String>();
-    let a2h = blocks
-        .chars()
-        .map(|c| {
-            if c == MAX_CHAR {
-                '.'
-            } else {
-                (c as u32).to_string().chars().next().unwrap()
-            }
-        })
-        .collect::<String>();
-
-    // println!("{}", a2h);
-    // println!("{}", ah);
+    let blocks_mod = defrag(&blocks);
 
     blocks_mod
         .chars()
@@ -188,9 +160,6 @@ fn main() {
 
     println!("Part One: {}", part_one(input));
     println!("Part Two: {}", part_two(input));
-    // 8592266602739 too high
-    // 6377751335816 too high
-    // 6363268359248 wrong
 }
 
 #[cfg(test)]
